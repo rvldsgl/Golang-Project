@@ -10,9 +10,9 @@ var addCmd = &cobra.Command{
     Aliases: []string{"addition"},
     Short:   "Add 2 numbers",
     Long:    "Carry out addition operation on 2 numbers",
-    Args:    cobra.ExactArgs(2),
-    Run: func(cmd *cobra.Command, args []string) {
-        fmt.Printf("Addition of %s and %s = %s.\n\n", args[0], args[1], Add(args[0], args[1]))
+    Args:    cobra.ExactArgs(1),
+    Run: func(cmd *cobra.Command, args []string)  {
+        fmt.Printf("%s.\n", Add(args[0]))
     },
 }
 
