@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 	"os"
+	"strconv"
 )
 
 type Task struct {
@@ -16,9 +17,7 @@ type Task struct {
 }
 
 
-
-func addJson(desc string) {
-	
+func addJson(desc string) {	
 	// 1. ngecek apakah file sudah ada atau belum
 	filename := "data.json"
 
@@ -52,7 +51,7 @@ func addJson(desc string) {
 		return
 	}
 
-	firstTask := Task{Id: 1, Description: desc, Status: "Todo", CreatedAt: time.Now(), UpdatedAt: time.Now()}
+	firstTask := Task{Id: len(tasks) + 1, Description: desc, Status: "Todo", CreatedAt: time.Now(), UpdatedAt: time.Now()}
 
 	tasks = append (tasks, firstTask)
 
@@ -67,14 +66,145 @@ func addJson(desc string) {
 
 	fmt.Println(string(jsonData))
 
+}
 
-	
+func updateJson(id string, desc string){
+	idInt, err := strconv.Atoi(id)
 
+	filename := "data.json"
+	jsonData, err := os.ReadFile(filename)
+	var tasks []Task
 
+	err = json.Unmarshal(jsonData, &tasks)
 
+	if err != nil{
+		fmt.Println("Error unmarshalling JSON", err)
+		return
+	}
 
+	for i,t := range tasks{
+		if t.Id == idInt{
+			tasks[i].Description = desc
+			tasks[i].UpdatedAt = time.Now()
+		}
+	}
 
+	jsonData, err = json.Marshal(tasks)
 
+	if err != nil{
+		fmt.Println("Error writing JSON to file:", err)
+		return
+	}
+  
+	os.WriteFile(filename, jsonData, 0644)
 
+	fmt.Println(string(jsonData))
+
+}
+
+func updateProgress(id string){
+	idInt, err := strconv.Atoi(id)
+
+	filename := "data.json"
+	jsonData, err := os.ReadFile(filename)
+	var tasks []Task
+
+	err = json.Unmarshal(jsonData, &tasks)
+
+	if err != nil{
+		fmt.Println("Error unmarshalling JSON", err)
+		return
+	}
+
+	for i,t := range tasks{
+		if t.Id == idInt{
+			tasks[i].Status = "in progress"
+			tasks[i].UpdatedAt = time.Now()
+		}
+	}
+
+	jsonData, err = json.Marshal(tasks)
+
+	if err != nil{
+		fmt.Println("Error writing JSON to file:", err)
+		return
+	}
+  
+	os.WriteFile(filename, jsonData, 0644)
+
+	fmt.Println(string(jsonData))
+
+}
+
+func updateDone(id string){
+	idInt, err := strconv.Atoi(id)
+
+	filename := "data.json"
+	jsonData, err := os.ReadFile(filename)
+	var tasks []Task
+
+	err = json.Unmarshal(jsonData, &tasks)
+
+	if err != nil{
+		fmt.Println("Error unmarshalling JSON", err)
+		return
+	}
+
+	for i,t := range tasks{
+		if t.Id == idInt{
+			tasks[i].Status = "done"
+			tasks[i].UpdatedAt = time.Now()
+		}
+	}
+
+	jsonData, err = json.Marshal(tasks)
+
+	if err != nil{
+		fmt.Println("Error writing JSON to file:", err)
+		return
+	}
+  
+	os.WriteFile(filename, jsonData, 0644)
+
+	fmt.Println(string(jsonData))
+
+}
+
+func List(){
+	filename := "data.json"
+	jsonData, err := os.ReadFile(filename)
+	var tasks []Task
+
+	err = json.Unmarshal(jsonData, &tasks)
+
+	if err != nil{
+		fmt.Println("Error unmarshalling JSON", err)
+		return
+	}
+
+	fmt.Println(tasks)
+
+}
+
+func ListDone(){
+	filename := "data.json"
+	jsonData, err := os.ReadFile(filename)
+	var tasks []Task
+
+	err = json.Unmarshal(jsonData, &tasks)
+
+	if err != nil{
+		fmt.Println("Error unmarshalling JSON", err)
+		return
+	}
+
+	var done  []Task
+	for i,t := range tasks{
+		if t.Status == "done"{
+			done = append(done, tasks[i])
+		}
+	}
+
+	fmt.Println(done)
 
 }

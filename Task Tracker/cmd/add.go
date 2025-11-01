@@ -8,8 +8,8 @@ import (
 var addCmd = &cobra.Command{
     Use:     "add",
     Aliases: []string{"addition"},
-    Short:   "Add 2 numbers",
-    Long:    "Carry out addition operation on 2 numbers",
+    Short:   "Add task into your todo list",
+    Long:    "Add task into your todo list",
     Args:    cobra.ExactArgs(1),
     Run: func(cmd *cobra.Command, args []string)  {
         fmt.Printf("%s.\n", Add(args[0]))
