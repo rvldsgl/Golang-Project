@@ -208,3 +208,36 @@ func ListDone(){
 	fmt.Println(done)
 
 }
+
+func delete(id string){
+	idInt, err := strconv.Atoi(id)
+
+	filename := "data.json"
+	jsonData, err := os.ReadFile(filename)
+	var tasks []Task
+
+	err = json.Unmarshal(jsonData, &tasks)
+
+	if err != nil{
+		fmt.Println("Error unmarshalling JSON", err)
+		return
+	}
+
+	for i, t := range tasks{
+		if t.Id == idInt{
+			tasks = append(tasks[:i],tasks[i+1:]...)
+		}
+	}
+
+	jsonData, err = json.Marshal(tasks)
+
+	if err != nil{
+		fmt.Println("Error writing JSON to file:", err)
+		return
+	}
+  
+	os.WriteFile(filename, jsonData, 0644)
+
+	fmt.Println(string(jsonData))
+	
+}
